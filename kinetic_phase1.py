@@ -33,4 +33,6 @@ plt.xlabel("X_position")
 plt.ylabel("Time_step")
 
 plt.xlim(0,L)
+
+# this plot is showing the positions of the particles over time. Obviously they will all have the same slope becusae im imcrementing the velocity the same for all.
 plt.show()
