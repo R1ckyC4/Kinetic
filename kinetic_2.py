@@ -1,8 +1,13 @@
 import numpy as np
 import matplotlib.pyplot as plt
+print("starting...")
+
+
+
+
 
 # parameters
-N = 100000 # number of macro parts
+N = 10 ** 7 # number of macro parts
 Ng = 256 # num of grid cells
 
 L = 2 * np.pi
@@ -26,6 +31,17 @@ velocities = rng.normal(0,0.1,N)
 #rho is charge density
 
 q_per = -L / N # charge per macro particle
+
+#fourier stuff for poisson solve (refer to notes.md on 8/10)
+# wavenums for each Fourier mode
+#np.fft.fftfreq returns cycles/unit so multiply by 2pi rads
+
+k = 2 * np.pi * np.fft.fftfreq(Ng, d=dx)
+k_safe = np.where( k == 0, 1.0, k) # prevent divide by zero
+
+
+
+
 
 def deposit_charge(positions):
     """
@@ -52,24 +68,49 @@ def deposit_charge(positions):
 
     return rho
 
+def field_solver(rho):
+    """
+    Solve poisson's equation for the E field by FFT
+    Using the rho as a function of position, return E(x)
+    """
+    rho_hat = np.fft.fft(rho)
+    E_hat = -1j * rho_hat/k_safe #here is where to worry about division by zero
+    E_hat[0] = 0.0 # guage choice (idk what this means tbh)
+    E = np.real(np.fft.ifft(E_hat))
+    return E
+
+
+
+
+
 
 # Testing
+print(f"total particles = {N}")
+
+
+# Test 1
+
 
 rho = deposit_charge(positions)
+E = field_solver(rho)
+print(f"uniform: max rho = {np.abs(rho).max()}")
 
+print(f"uniform: max E = {np.abs(E).max()}")
 
-print(f"total particles = {N}")
-print(f"mean rho = {rho.mean()}")
-print(f"max rho = {np.abs(rho).max()}")
-print(f"q_er = {q_per}")
-print(f"sum rho = {rho.sum() * dx}")
-print(f"first 10 rho values {rho[:10]}")
-plt.plot(x_grid,rho)
-plt.xlabel('x')
-plt.ylabel('rho')
-plt.title("charge density (uniform)")
-plt.axhline(0,color='k', lw = 0.5)
+# make a sinusoidal pertubation and check if E is right
+# disturb each particle by a small cos pertubation
+pert_amplitude = 0.01
+positions_pert = (positions + pert_amplitude * np.cos(positions)) % L
+rho_p = deposit_charge(positions_pert)
+E_p = field_solver(rho_p)
 
-#notice how this plot is centered around zero? Thats noise bc I don't own a super computer and need to work with finate particle numbers :(. 
-# #The Poisson noise should scale as sqrt(Ng/N) i think
+fig, axes = plt.subplots(2, 1, figsize=(10, 6))
+axes[0].plot(x_grid,rho_p)
+axes[0].set_ylabel("rho")
+
+axes[0].set_title("Density after Perturbation")
+axes[1].plot(x_grid, E_p)
+axes[1].set_xlabel('x')
+axes[1].set_title('Electric field')
+plt.tight_layout()
 plt.show()
