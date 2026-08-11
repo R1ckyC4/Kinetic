@@ -24,7 +24,7 @@ Extended kinetic2_2.py to a PIC simulation. Built the interpolation_field functi
 Field energy oscillates kinda nicely at -2 * omega_p (ang freq)
 
 **sadly i forgot to save the graphs of the work before the oscillation test** 
-![Plasma oscillation field energy](figure\plasma_oscillation_test1.png)
+![Plasma oscillation field energy](figure/plasma_oscillation_test1.png)
 I would have to note that the energy starts really high at t = 0
 
 ## 8/9/2026
