@@ -11,3 +11,12 @@ which means the second derivative is just multiplying by -k^2
 
 
 shot noise: arised from the fact we are counting finate discrete events but trying to represent a continuous value. 
+
+PIC - particle in cell 
+Four steps: deposit, solve, intepolate, push
+    interestingly enough, this is really similar to Jos Stam's stable fluid pipeline
+
+d
+Instead of calculating particle to particle for N bodies, we only analyze the system at points on the spatial grid. 
+We can vary our accuracy and precision by increasing the density of these grids or adding more particles
+

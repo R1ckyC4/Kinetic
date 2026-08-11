@@ -2,12 +2,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 print("starting...")
 
-
+from scipy.signal import find_peaks
 
 
 
 # parameters
-N = 10 ** 7 # number of macro parts
+N = 10 ** 5 # number of macro parts
 Ng = 256 # num of grid cells
 
 L = 2 * np.pi
@@ -80,6 +80,15 @@ def field_solver(rho):
     return E
 
 
+def interpolate_field(E, positions):
+    """
+    Sample the grid E field at each particles postition using CIC. Testing out symmetric weights to prevent self force and preserve momentum
+    """
+    j_float = positions / dx 
+    j = np.floor(j_float).astype(int) % Ng
+    f = j_float - np.floor(j_float)
+    jp1 = (j + 1) % Ng
+    return (1 - f) * E[j] + f * E[jp1]
 
 
 
@@ -104,13 +113,44 @@ positions_pert = (positions + pert_amplitude * np.cos(positions)) % L
 rho_p = deposit_charge(positions_pert)
 E_p = field_solver(rho_p)
 
-fig, axes = plt.subplots(2, 1, figsize=(10, 6))
-axes[0].plot(x_grid,rho_p)
-axes[0].set_ylabel("rho")
+# testing out leapfrog method for simulation
+# push velocites backwards by half a step
 
-axes[0].set_title("Density after Perturbation")
-axes[1].plot(x_grid, E_p)
-axes[1].set_xlabel('x')
-axes[1].set_title('Electric field')
-plt.tight_layout()
+rho0 = deposit_charge(positions)
+E0 = field_solver(rho0)
+Ep0 = interpolate_field(E0, positions)
+velocities += 0.5 * Ep0 * dt # v(dt/2) = v(0) + d * dt/2 (a ~ -E)
+# report back pls
+field_energy = np.zeros(n_steps)
+
+# main PIC loop
+
+for step in range(n_steps):
+    rho = deposit_charge(positions) # 1. deposit
+    E = field_solver(rho) # 2. solve
+    Ep = interpolate_field(E,positions) # interpolate
+    velocities += - Ep * dt # 4. kick
+    positions += velocities * dt # 5. drift
+    positions = positions % L # 6. wrap
+    field_energy[step] = 0.5 * np.sum(E**2) * dx
+
+# plot field energy over time
+t = np.arange(n_steps) * dt
+plt.figure(figsize=(10,5))
+plt.plot(t,field_energy)
+plt.xlabel('t')
+plt.ylabel('field energy')
+plt.title('plasma ocsillation test :)')
 plt.show()
+
+# measurements yay
+peaks, blank = find_peaks(field_energy)
+if len(peaks) >= 2:
+    period_measured = np.mean(np.diff(peaks)) * dt
+    freq_measured = 2 * np.pi / period_measured
+    print(f"measured period between peaks is {period_measured}")
+    print(f"measured frequency (should be 2 * omega_p = 2) is {freq_measured}")
+else: 
+    print(f"lowkey didn't work")
+    
+    
