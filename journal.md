@@ -1,3 +1,11 @@
+## 8/11/2026
+    fixed a bug in my code where the perturbation I seeded wasn't even interacting with the loop. Simple fix. 
+    This does mean that the graph I generated yesterday isn't as accurate as it can be. 
+    ![Plasma oscillation field energy](figure/plasma_oscillation_test2.png)
+    Compare the two plots, the amplitudes of the new oscillation plot is larger. 
+
+
+
 ## 8/10/2026
 
 **Did**

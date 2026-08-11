@@ -16,7 +16,10 @@ PIC - particle in cell
 Four steps: deposit, solve, intepolate, push
     interestingly enough, this is really similar to Jos Stam's stable fluid pipeline
 
-d
+
 Instead of calculating particle to particle for N bodies, we only analyze the system at points on the spatial grid. 
 We can vary our accuracy and precision by increasing the density of these grids or adding more particles
+
+
+
 

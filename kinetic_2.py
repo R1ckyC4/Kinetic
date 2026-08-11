@@ -109,9 +109,12 @@ print(f"uniform: max E = {np.abs(E).max()}")
 # make a sinusoidal pertubation and check if E is right
 # disturb each particle by a small cos pertubation
 pert_amplitude = 0.01
-positions_pert = (positions + pert_amplitude * np.cos(positions)) % L
-rho_p = deposit_charge(positions_pert)
-E_p = field_solver(rho_p)
+positions = (positions + pert_amplitude * np.cos(positions)) % L
+
+
+#positions_pert = (positions + pert_amplitude * np.cos(positions)) % L
+#rho_p = deposit_charge(positions_pert)
+#E_p = field_solver(rho_p)
 
 # testing out leapfrog method for simulation
 # push velocites backwards by half a step
