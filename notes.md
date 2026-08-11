@@ -1,3 +1,25 @@
+## 8/11
+single warm plasmas are stable because energy stays trapped between fields and particles. When a localized bunch appears, the field that it creates 
+pushes against local particles. Then those particles push back against the bunch and flatten it back towards uniform. However, because electrons have mass, they overshoot just like a mass on a spring and 
+slosh back and forth. 
+But that process kinda happens back and forth, so it forms a closed loop with no net gain
+
+two counter streams are unstable because theres excess kinetic energy (from the physical movement of the stream) 
+the instability will die when teh two beams are thermalized, which means it is not longer ordered and directional (randomized)
+Kinetic energy is converted to field energy.
+
+
+linear growth phase doesn't mean that the plasma grows linearly
+    but rather that the linearized physics equations predicts exponential growth
+    the linear part here is referencing the regime and not the shape.
+
+Counter streaming beams lead to vortices because the field, which gained energy from the kinetic energy of the particles,
+becomes strong enough to trap electrons. When a significant number of the beam particles gets trapped, the beams look like theyve broekn up into hot particels swirling around the wave
+
+
+
+
+
 ## 8/10/2026 poisson solve on kinetic_2.py
 periodic functions can be written as a Fourier Series, or a sum of complex expos
 

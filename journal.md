@@ -3,7 +3,20 @@
     This does mean that the graph I generated yesterday isn't as accurate as it can be. 
     ![Plasma oscillation field energy](figure/plasma_oscillation_test2.png)
     Compare the two plots, the amplitudes of the new oscillation plot is larger. 
+    8 peaks over 25 units of time, is about a period of about 3.
+    Given that frequency is 6.14/ period, the frequency is about 2
+    
+    
+**phase 3**
 
+     planning to work on the 2 stream instability and attempt to get phase eye diagrams.
+
+     The dispersion relation for two symmetric cold beams predicts a max growth rate of k * v0 ~~ w_p / sqrt2
+
+     my paramets w_p = 1 and k = 1
+     so therefore, V0 shoud roughly be 1/sqrt2 or 0.707
+    
+      
 
 
 ## 8/10/2026
