@@ -27,6 +27,14 @@ Field energy oscillates kinda nicely at -2 * omega_p (ang freq)
 ![Plasma oscillation field energy](figure/plasma_oscillation_test1.png)
 I would have to note that the energy starts really high at t = 0
 
+
+**next steps**
+    phase 3: probably going to attempt a 2 stream instability 
+        instead of just one electron population, we have two beams rushing against each other, then I seed a perturbation and see what happens
+        what I should get is an instability so it isnt just a simple oscillation and should wobble out of control
+        the two beams should bend into each other as these wobbles grow and turn into these eye shaped plots called phase space vortices
+
+    phase 4: Landau damping (will need to learn what this is first)
 ## 8/9/2026
 playing around in kinetic_2. In phase 1 i only practiced making a box with some particles in it to warm up my numpy skills. Phase 2 i was playing around with charge densities and distributions in 1d in a CIC.
 **Did**
