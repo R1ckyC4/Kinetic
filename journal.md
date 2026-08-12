@@ -36,7 +36,7 @@
 **the issue was that the if statement for the snapshots wasnt properly nested within the PIC loop, making the PIC loop finish first and then the snapshots capture the same thing 4 times** 
 
 this is the corrected phase space one
-![phase-space-eyes](figure/phase-space-corrected.png)
+![phase-space-eyes](figure/phase-shape-corrected.png)
 
 ## 8/10/2026
 
