@@ -67,6 +67,8 @@ Field energy oscillates kinda nicely at -2 * omega_p (ang freq)
 ![Plasma oscillation field energy](figure/plasma_oscillation_test1.png)
 I would have to note that the energy starts really high at t = 0
 
+8/11 update
+![Plasma oscillation corrected](figure/oscillation-test-corrected.png)
 
 **next steps**
     phase 3: probably going to attempt a 2 stream instability 
