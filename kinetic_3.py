@@ -7,7 +7,7 @@ from scipy.signal import find_peaks
 
 
 # parameters
-N = 10 ** 5 # number of macro parts
+N = 10 ** 6 # number of macro parts
 Ng = 64 # num of grid cells
 
 L = 2 * np.pi
@@ -130,6 +130,14 @@ velocities += 0.5 * Ep0 * dt # v(dt/2) = v(0) + d * dt/2 (a ~ -E)
 # report back pls
 field_energy = np.zeros(n_steps)
 
+# save phase space snapshots at intermediate times between start and end
+
+snapshot_steps = [0, n_steps // 3, 2 * n_steps // 3, n_steps - 1]
+snapshot_x = []
+snapshot_v = []
+
+
+
 # main PIC loop
 
 for step in range(n_steps):
@@ -140,24 +148,35 @@ for step in range(n_steps):
     positions += velocities * dt # 5. drift
     positions = positions % L # 6. wrap
     field_energy[step] = 0.5 * np.sum(E**2) * dx
+    if step in snapshot_steps:
+        snapshot_x.append(positions.copy())
+        snapshot_v.append(velocities.copy())
 
-# plot field energy over time
+# plot 1 field energy log scale
+gamma = 0.35
+
 t = np.arange(n_steps) * dt
 plt.figure(figsize=(10,5))
-plt.plot(t,field_energy)
-plt.xlabel('t')
-plt.ylabel('field energy')
-plt.title('plasma ocsillation test :)')
+plt.semilogy(t,field_energy)
+plt.xlabel("t")
+plt.ylabel("field energy (log scale)")    
+plt.title("2 stream instability: energy growth")
+
+# overlay the predicted growth rate we got from our very rigorous math
+t_ref = t[50:400]
+W_ref = field_energy[50] * np.exp(2 * gamma * (t_ref - t_ref[0]))
+plt.semilogy(t_ref, W_ref, "--", label=f"theory = exp(2*{gamma}*t)")
+plt.legend()
 plt.show()
 
-# measurements yay
-peaks, blank = find_peaks(field_energy)
-if len(peaks) >= 2:
-    period_measured = np.mean(np.diff(peaks)) * dt
-    freq_measured = 2 * np.pi / period_measured
-    print(f"measured period between peaks is {period_measured}")
-    print(f"measured frequency (should be 2 * omega_p = 2) is {freq_measured}")
-else: 
-    print(f"lowkey didn't work")
-    
-    
+# plot 2 - phase space
+fig , axes = plt.subplots(1,4, figsize=(20,5))
+titles = ["inital", "early growth", "late growth", "saturation"]
+for ax , x, v , titles in zip(axes, snapshot_x, snapshot_v, titles):
+    ax.scatter(x , v , s=0.2, alpha = 0.4)
+    ax.set_xlabel('x')
+    ax.set_ylabel('v')
+    ax.set_title(titles)
+plt.tight_layout()
+
+plt.show()    

@@ -16,8 +16,27 @@
      my paramets w_p = 1 and k = 1
      so therefore, V0 shoud roughly be 1/sqrt2 or 0.707
     
-      
+    i copied the functions and parameters from phase 2 into a new file so the two of them are not cluttered.
+    phase 3 generates 2 plots: one discribes the field energy growth over time as a semilog plot
+    simulated growth rate vs theory
+![2 stream instability growth rate vs theory](figure/two_steam_instability_energy_growth.png)
+    linear growth phase lasts from t~5 to t~19 where it kinda matches the theory line
+    yay
+    looks like saturation starts at around t = 20 where the energy kinda plateaus
 
+    i believe the dip at t = 35 is likely the phase space vortices merging
+
+
+
+    the other is 4 phase-space plots
+![phase-space-eyes](figure/phase-space-plot.png)
+    I don't believe this is right. They shoudn't all look the same. Probably a minor bug on my code where i capture the same snap shot 4 times
+    will try again/
+
+**the issue was that the if statement for the snapshots wasnt properly nested within the PIC loop, making the PIC loop finish first and then the snapshots capture the same thing 4 times** 
+
+this is the corrected phase space one
+![phase-space-eyes](figure/phase-space-corrected.png)
 
 ## 8/10/2026
 
