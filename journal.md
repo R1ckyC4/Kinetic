@@ -23,7 +23,9 @@
 
     Made a new file called "pic.py" that contains all of the functions used in phase 1 2 3 for cleaner code.
 
+    Made a new file called sims.py to handle all the physics calls, so the kinetic.app is able cleanly call the type of simulation/
 
+    
 
 
 

@@ -53,7 +53,7 @@ if st.button("run simulation", type="primary"):
         field_energy = np.zeros(n_steps)
         for step in range(n_steps):
             rho = deposit_charge(positions, Ng, dx, q_per)
-            E = field_solver(rho0, k_safe)
+            E = field_solver(rho, k_safe) 
             Ep = interpolate_field(E, positions, Ng, dx)
             velocities += -Ep * dt
             positions += velocities * dt
