@@ -1,3 +1,34 @@
+## 8/13/2026
+    Techinically im doing work for 8/12 but its already past midnight
+    Im going to put off landau dampening and learn to use streamlit to turn the simulation into a gui
+
+    pip install streamlit
+    watched a crash course on steamlet on youtube
+    https://www.youtube.com/watch?v=d7fnzDQ5qM8 
+    20 minutes
+
+    2026-08-13 00:36:59.241 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+
+    not quite sure how to run it just yet.
+
+    by running this command
+         streamlit run c:/Users/Ricky/Documents/git-projects/MITmaker/Kinetic/kinetic_app.py 
+    i got a website on localhost to run on my browser
+    pretty cool
+
+    streamlit wrapper works, website is on localhost and goes up
+    the simulation doesn't quite work but kicks no errors. So thats annoying
+    here is the issue plot that it generates, also forgot to add the phase space plots
+![issue plot](figure/website_wrapper_test1.png)
+
+    Made a new file called "pic.py" that contains all of the functions used in phase 1 2 3 for cleaner code.
+
+
+
+
+
+
+
 ## 8/11/2026
     fixed a bug in my code where the perturbation I seeded wasn't even interacting with the loop. Simple fix. 
     This does mean that the graph I generated yesterday isn't as accurate as it can be. 
