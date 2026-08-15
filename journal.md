@@ -1,3 +1,15 @@
+## 8/14/2026
+    cleaned up kinetic_app.py
+    doesnt quite work right now
+    The oscillation plot for some reason just became a inverse proportional plot.
+
+    And the two stream doesnt even show. 
+
+    its like fixing boiler plate :(
+
+
+
+
 ## 8/13/2026
     Techinically im doing work for 8/12 but its already past midnight
     Im going to put off landau dampening and learn to use streamlit to turn the simulation into a gui
