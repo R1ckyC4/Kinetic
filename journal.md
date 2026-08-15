@@ -1,3 +1,15 @@
+## 8/15/2026
+    going to fix the streamlit wrapper gui today.
+    few minor bugs such as the misspelled velocities in the run_two_stream function in sims.py and missing the "+" in += 
+    The latter didn't kick any errors when running but outputted faulty plots
+
+    okay everything seems to be working now.
+
+    Going to add the theoretical growth line back to the two stream instability plot
+    The auto scaling of the y axis makes it difficult to properly guage how good the fit is
+    going to calculate the fit coefficent for when the two domains overlap
+
+    things seem like they work. Imma push
 ## 8/14/2026
     cleaned up kinetic_app.py
     doesnt quite work right now

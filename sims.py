@@ -22,7 +22,7 @@ def run_plasma_oscillation(N, Ng, dt, n_steps, pert_amplitude, L= 2 * np.pi, see
     rho0 = deposit_charge(positions, Ng, dx, q_per)
     E0 = field_solver(rho0, k_safe)
     Ep0 = interpolate_field (E0, positions, Ng, dx)
-    velocities += 0.5 * -Ep0 * dt 
+    velocities += 0.5 * Ep0 * dt 
 
     # Main loop
     field_energy = np.zeros(n_steps)
@@ -30,7 +30,7 @@ def run_plasma_oscillation(N, Ng, dt, n_steps, pert_amplitude, L= 2 * np.pi, see
         rho = deposit_charge(positions, Ng, dx, q_per)
         E = field_solver(rho, k_safe)
         Ep = interpolate_field(E, positions, Ng, dx)
-        velocities = -Ep * dt
+        velocities += -Ep * dt
         positions += velocities * dt
         positions = positions % L # wrap around 
 
@@ -47,7 +47,7 @@ def run_two_stream(N, Ng, dt, n_steps, pert_amplitude, v0, L = 2* np.pi, seed = 
     rng = np.random.default_rng(seed=seed)
     positions = rng.uniform(0,L,N)
     velocities = np.where(np.arange(N) < N // 2, v0, -v0)
-    velocites += rng.normal(0, 0.01, N) # small thermal spread
+    velocities += rng.normal(0, 0.01, N) # small thermal spread
 
     positions = (positions + pert_amplitude * np.cos(positions)) % L
     rho0 = deposit_charge(positions, Ng, dx, q_per)

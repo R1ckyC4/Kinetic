@@ -8,11 +8,11 @@ st.set_page_config(page_title = "Kinetic PIC", layout="wide")
 
 st.title("Kinetic: 1D electrostatic PIC Plasma Simulation")
 st.write("A particle-in-cell (PIC) built from scratch ")
-st.write("Feel free to adjust parameters in the sidebar (if i get that far) for the simulation")
+st.write("Feel free to adjust parameters in the sidebar for the simulation")
 st.write("More particles obviously gives a more accurate simulation")
 st.write("Sadly, youll only be seeing a few plots (they're still pretty cool) instead of a cool 2d/3d real time rendering")
 
-st.write("Watch electrons oscillate at the plasma frequency, or set up two counter steaming electron beams"
+st.write("Watch electrons oscillate at the plasma frequency, or set up two counter streaming electron beams"
          "and watch the two stream instability grow into phase-space vortices")
 
 
@@ -52,13 +52,31 @@ if st.button("run simulation", type="primary"):
     # Field energy plot
     fig, ax = plt.subplots(figsize=(10,5))
     if mode == "Two Stream Instability":
-        ax.semilogy(t, field_energy)
+        ax.semilogy(t, field_energy, label=f"simulated")
+        # overlay theoretical grwoth rate for comparison
+        gamma = 0.35 #theoretical
+        fit_start = n_steps // 10
+        fit_end = 3 * (n_steps // 4)
+        t_ref = t[fit_start:fit_end]
+        log_E_ref = np.log(field_energy[fit_start:fit_end])
+
+        #fit a straight line to log(E) in growth window
+        slope, intercept = np.polyfit(t_ref, log_E_ref, deg = 1)
+        gamma_measured = slope/2
+
+        W_ref = field_energy[fit_start] * np.exp(2 * gamma * (t_ref - t_ref[0]))
+        W_fit = np.exp(slope * t_ref + intercept)
+
+        ax.semilogy(t_ref, W_ref, "--", label=f"theory: exp(2 * {gamma} * t)")
+        ax.semilogy(t_ref, W_ref, ":", label = f"fit: gamma = {gamma_measured}")
+        ax.legend()
         ax.set_ylabel("field energy (log scale)")
+
 
 
     else:
         ax.plot(t, field_energy)
-        ax.set_ylabel("field_energy")
+        ax.set_ylabel("field energy")
     ax.set_xlabel("t")
     ax.set_title(mode)
     st.pyplot(fig)
@@ -67,7 +85,7 @@ if st.button("run simulation", type="primary"):
 
     if snapshots is not None:
         fig, axes = plt.subplots(1,4, figsize=(20,5))
-        titles = ["inital", "early growth", "late growth", "saturation"]
+        titles = ["initial", "early growth", "late growth", "saturation"]
         for ax, x, v, title in zip(axes, snapshots["x"], snapshots["v"], titles):
             ax.scatter(x,v,s=0.2, alpha = 0.4)
             ax.set_xlabel("x")
@@ -77,6 +95,14 @@ if st.button("run simulation", type="primary"):
         st.pyplot(fig)
 
     st.success(f"Ran {n_steps} steps with {N} number of particles.")
+
+    if mode == "Two Stream Instability": 
+        col1, col2, col3 = st.columns(3)
+        col1.metric(f"Measured Gamma = {gamma_measured}")
+        col1.metric(f"Theory Gamma = {gamma}")
+        col1.metric(f"Error = {abs(gamma_measured - gamma) / gamma * 100}%")
+
+
 
 else:
     st.info("Adjust parameters in the sidebar and click **Run simulation**")
