@@ -1,6 +1,7 @@
 import streamlit as st
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.signal import find_peaks
 
 from sims import run_plasma_oscillation, run_two_stream
 
@@ -68,18 +69,57 @@ if st.button("run simulation", type="primary"):
         W_fit = np.exp(slope * t_ref + intercept)
 
         ax.semilogy(t_ref, W_ref, "--", label=f"theory: exp(2 * {gamma} * t)")
-        ax.semilogy(t_ref, W_ref, ":", label = f"fit: gamma = {gamma_measured}")
+        ax.semilogy(t_ref, W_fit, ":", label = f"Measured from Sim gamma = {gamma_measured}")
         ax.legend()
         ax.set_ylabel("field energy (log scale)")
 
 
 
     else:
-        ax.plot(t, field_energy)
+        ax.plot(t, field_energy, label="simulated")
+
+        #measure oscillation frequency from field energy peaks
+        # use the prominence function from scipi to ignore noise ripples
+
+        peaks, _ = find_peaks(field_energy, prominence=0.1 * np.max(field_energy))
+
+        if len(peaks) >= 2:
+            period_measured = np.mean(np.diff(peaks)) * dt
+            freq_measured = 2 * np.pi / period_measured
+        else:
+            freq_measured = None
+
+        freq_theory = 2.0 # field energy should oscillate at 2 * omega_p which I confirmed in phase 2/3 to be equal to 2.0
+
+        # mark the peaks for easier visuals
+
+        if len(peaks) >= 2:
+            ax.plot(t[peaks], field_energy[peaks], "rx", markersize = 8, label="detected peaks")
         ax.set_ylabel("field energy")
+        ax.legend()
+
     ax.set_xlabel("t")
     ax.set_title(mode)
     st.pyplot(fig)
+    if mode == "Two Stream Instability":
+        st.markdown("""
+        **What this shows:** Two counter streaming electron beams at unstable. One small perturbation grows exponentially over time, converting energy from the beams' ordered motion 
+        into the electric field.
+        - **Simulation output:** (Solid blue line) shows the field energy from the PIC loop on log scale
+        - **Theory Prediction:** (dashed): physics (cold plasma dispersion theory) predicts this growth 
+        - **Measured from simulation** (dotted) is a straight line fit to the plot derived from the simulated measurements. Its slope/2 (in theory) should give us the real growth rate
+
+        the measurements are also outputted below
+        """)
+    elif mode == "Plasma Oscillation":
+        st.markdown("""
+    **What this shows**: Plasma electrons are perturbed slightly from eqiulibrium. Then the system tries to correct itself but because electrons have mass, they overshoot (similar to a mass on a spring).
+    They oscillate at the plasma frequency w_p or omega_p (i might have used both in my code).
+
+    It is interesting to note that the field energy is actually twice the plasma frequency because energy ~ E (electric field) squared. Squaring doubles frequency.
+    In the normalized units of mine, w_p = 1, so the expected measured frequency is 2. 
+    Red Xs mark the peaks.
+""")
 
     # Phase space
 
@@ -95,12 +135,20 @@ if st.button("run simulation", type="primary"):
         st.pyplot(fig)
 
     st.success(f"Ran {n_steps} steps with {N} number of particles.")
-
+# measurements
     if mode == "Two Stream Instability": 
         col1, col2, col3 = st.columns(3)
-        col1.metric(f"Measured Gamma = {gamma_measured}")
-        col1.metric(f"Theory Gamma = {gamma}")
-        col1.metric(f"Error = {abs(gamma_measured - gamma) / gamma * 100}%")
+        col1.metric(f"Measured Gamma", f"{gamma_measured:.3f}")
+        col2.metric(f"Theory Gamma" , f"{gamma:.3f}")
+        col3.metric("Error", f"{abs(gamma_measured - gamma) / gamma * 100:.1f}%")
+    elif mode == "Plasma Oscillation":
+        if freq_measured is not None:
+            col1, col2, col3 = st.columns(3)
+            col1.metric("Measured omega", f"{freq_measured:.3f}")
+            col2.metric("Theory 2 omega_p", f"{freq_theory:.3f}")
+            col3.metric("Error", f"{abs(freq_measured - freq_theory) / freq_theory * 100:.1f}%")
+        else:
+            st.warning("Not enough oscillation peaks detected, try increasing n_steps or pert_amplitude")
 
 
 

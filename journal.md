@@ -9,6 +9,16 @@
     The auto scaling of the y axis makes it difficult to properly guage how good the fit is
     going to calculate the fit coefficent for when the two domains overlap
 
+
+
+    noticed that my fit and measured lines were the same becuase in a small bug in my code
+    i was plotting the same thing for fit and measured.
+
+    added a report for some measurements after the plots on the streamlit webstie
+    probably should use some formatting so the number isnt 0.3424811734497774 
+
+    also added descriptions underneath all the plots, except the phase space one. Will get to that soon.
+
     things seem like they work. Imma push
 ## 8/14/2026
     cleaned up kinetic_app.py
