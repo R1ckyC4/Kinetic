@@ -5,6 +5,8 @@ Physics simulations written from scratch, each validated against an analytical s
 I am doing a plasma physics simulation to pay homage to the Columbia SHP course on plasma physics that got me hooked on physics, which eventually led me towards engineering.
 But i plan to fold multiple types of simulations here eventually and then fold as many as i can into a sandbox. But as of right now, it has two plasma physics simulations.
 
+![phase-space-eyes](figure/phase-shape-corrected.png)
+
 ## What it does
 This is a 1D electrostatic particle-in-cell plasma simulation (PIC). It runs in the browser and uses sliders for a user to adjust simulation parameters. There are two simulations currently active. Their descirptions are provided below.
 
