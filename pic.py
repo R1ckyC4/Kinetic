@@ -49,5 +49,26 @@ def interpolate_field(E, positions, Ng, dx):
     return (1 - f) * E[j] + f * E[jp1]
 
 
+def two_stream_growth_rate(k,v0):
+    """Linear growth rate for a cold two stream instability
+    Two symmetric cold beams at plus or minus v0, with our normalized units (omega_p = 1)
+    The dispersion equation reduces down into 
+        gamma^2 = (sqrt(8a ^2 + 1) - (2a^2 +1) / 2)
 
+
+    
+    Returns np.nan if there is no stability
+    Returns gamma
+    """
+    a = k * v0
+    if a >= 1.0:
+        return np.nan
+    gamma_squared = (np.sqrt(8 * a**2 + 1) - (2 * a**2 + 1)) / 2
+    return np.sqrt(gamma_squared)
+
+#testing to see if my fix works
+if __name__ == "__main__":
+    print(two_stream_growth_rate(1, 0.7071))   # expect 0.3436
+    print(two_stream_growth_rate(1, 0.6124))   #expect 0.3536
+    print(two_stream_growth_rate(1, 1.2))      #expect nan
 

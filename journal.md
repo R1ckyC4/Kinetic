@@ -1,3 +1,9 @@
+## 8/29
+    caught a few errors with the physics sadly
+    in pic.py I think the issue is that I hardcoded gamma to be 0.35 instead of letting the code do with the math.
+
+    
+
 ## 8/15/2026
     going to fix the streamlit wrapper gui today.
     few minor bugs such as the misspelled velocities in the run_two_stream function in sims.py and missing the "+" in += 

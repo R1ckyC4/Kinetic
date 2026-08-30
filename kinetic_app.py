@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 from scipy.signal import find_peaks
 
 from sims import run_plasma_oscillation, run_two_stream
+from pic import two_stream_growth_rate
 
 st.set_page_config(page_title = "Kinetic PIC", layout="wide")
 
@@ -40,6 +41,7 @@ if mode == "Two Stream Instability":
 # Fixed physical constants
 
 L = 2 * np.pi
+k = 2 * np.pi / L
 q_per = -L / N
 
 # run the sim
@@ -55,7 +57,7 @@ if st.button("run simulation", type="primary"):
     if mode == "Two Stream Instability":
         ax.semilogy(t, field_energy, label=f"simulated")
         # overlay theoretical grwoth rate for comparison
-        gamma = 0.35 #theoretical
+        gamma = two_stream_growth_rate(k, v0)
         fit_start = n_steps // 10
         fit_end = 3 * (n_steps // 4)
         t_ref = t[fit_start:fit_end]
@@ -65,11 +67,14 @@ if st.button("run simulation", type="primary"):
         slope, intercept = np.polyfit(t_ref, log_E_ref, deg = 1)
         gamma_measured = slope/2
 
-        W_ref = field_energy[fit_start] * np.exp(2 * gamma * (t_ref - t_ref[0]))
         W_fit = np.exp(slope * t_ref + intercept)
 
-        ax.semilogy(t_ref, W_ref, "--", label=f"theory: exp(2 * {gamma} * t)")
-        ax.semilogy(t_ref, W_fit, ":", label = f"Measured from Sim gamma = {gamma_measured}")
+        if not np.isnan(gamma):
+            W_ref = field_energy[fit_start] * np.exp(2 * gamma * (t_ref - t_ref[0]))
+            ax.semilogy(t_ref, W_ref, "--", label=f"theory: exp(2 * {gamma:.3f} * t)")
+
+        ax.semilogy(t_ref, W_fit, ":", label=f"Measured from Sim gamma = {gamma_measured:.3f}")
+
         ax.legend()
         ax.set_ylabel("field energy (log scale)")
 
@@ -139,8 +144,12 @@ if st.button("run simulation", type="primary"):
     if mode == "Two Stream Instability": 
         col1, col2, col3 = st.columns(3)
         col1.metric(f"Measured Gamma", f"{gamma_measured:.3f}")
-        col2.metric(f"Theory Gamma" , f"{gamma:.3f}")
-        col3.metric("Error", f"{abs(gamma_measured - gamma) / gamma * 100:.1f}%")
+        if not np.isnan(gamma):
+            col2.metric("Theory Gamma", f"{gamma:.3f}")
+            col3.metric("Error", f"{abs(gamma_measured - gamma) / gamma * 100:.1f}%")
+        else:
+            col2.metric("Theory Gamma", "stable")
+            col3.metric("Error", "—")
     elif mode == "Plasma Oscillation":
         if freq_measured is not None:
             col1, col2, col3 = st.columns(3)
