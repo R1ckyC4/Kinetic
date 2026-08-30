@@ -15,6 +15,8 @@ This is a 1D electrostatic particle-in-cell plasma simulation (PIC). It runs in 
 
 
 ## How to Run
+Go to this link: https://kinetic-physics-sim.streamlit.app/ 
+If you want to run this locally, then here:
 ```bash
 pip install -r requirements.txt
 streamlit run kinetic_app.py
