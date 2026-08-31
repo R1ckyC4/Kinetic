@@ -2,7 +2,8 @@
 Physics simulations written from scratch, each validated against an analytical solution (nerd math) instead of just looking about right.
 
 
-I am doing a plasma physics simulation to pay homage to the Columbia SHP course on plasma physics that got me hooked on physics, which eventually led me towards engineering.
+I am doing a plasma physics simulation to pay homage to the Columbia SHP course on plasma physics that got me hooked on physics, which eventually led me towards engineering. I also made these simulations as I was reading through Chen's Intro to Plasma Physics and Plasma Physics Via Computer Simulation by Birdsall and Langdon
+
 But i plan to fold multiple types of simulations here eventually and then fold as many as i can into a sandbox. But as of right now, it has two plasma physics simulations.
 
 ![phase-space-eyes](figure/phase-shape-corrected.png)
@@ -57,4 +58,5 @@ There are four well documented steps for Plasma PIC. Whice are:
 ## Whats Next
 I want to add Landau dampening, then rigid body dynamics as a second module along side the plasma physics one.
 
-Sources: Francis Chen's Introduction of Plasma Physics and Controlled Fusion
+Sources: Francis Chen's Introduction of Plasma Physics and Controlled Fusion, Birdsll and Langdon's Plasma Physics Via Computer Simulation
+
